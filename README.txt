@@ -3,8 +3,7 @@ Project is a mobile app used to help users take care of their plants.
 Users can keep track of which plants they own and their specific needs.
 
 How to install
-Download and unzip the project folder Install using apk file found at 
-“Plantpedia\app\build\outputs\apk\debug”
+Download and unzip the project folder Install using apk file found at “Plantpedia\app\build\outputs\apk\debug”
 
 How to use Plantpedia
 Once installed, accept all permissions when prompted. A user can add a plant to their database by clicking on "ADD PLANT". 
