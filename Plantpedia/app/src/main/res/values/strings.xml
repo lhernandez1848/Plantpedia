@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Plantpedia</string>
+    <string name="plant_name">Name:</string>
+    <string name="plant_type">Type:</string>
+    <string name="life_cycle">Life Cycle:</string>
+    <string name="plant_sun">Sun:</string>
+    <string name="water_req">Water:</string>
+    <string name="temperature">Temperature:</string>
+    <string name="comments">Comments:</string>
+    <string name="imageDescription">Image for plant</string>
+    <string name="add_plant">Add Plant</string>
+</resources>
