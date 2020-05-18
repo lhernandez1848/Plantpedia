@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/btnViewGallery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Gallery"
+            android:textStyle="bold"
+            android:textColor="@color/darkGray"
+            android:background="@drawable/no_border_gray"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:textSize="30sp"/>
+        <Button
+            android:id="@+id/btnTakePhoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Take Photo"
+            android:textStyle="bold"
+            android:textColor="@color/darkGray"
+            android:background="@drawable/no_border_gray"
+            android:layout_marginTop="2dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:textSize="30sp"/>
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:textStyle="bold"
+            android:textColor="@color/darkGray"
+            android:background="@drawable/no_border_gray"
+            android:layout_marginTop="2dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:textSize="30sp"/>
+    </LinearLayout>
+
+</RelativeLayout>

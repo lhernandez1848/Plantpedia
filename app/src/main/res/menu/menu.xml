@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<item
+    android:id="@+id/action_more"
+    android:icon="@drawable/ic_menu"
+    android:title=""
+    app:showAsAction="ifRoom">
+    <menu>
+        <item android:id="@+id/btnSearch"
+            android:title="Search"
+            android:icon="@drawable/ic_search"
+            app:showAsAction="never"/>
+
+        <item android:id="@+id/btnAddPlant"
+            android:title="Add Plant"
+            android:icon="@drawable/ic_add"
+            app:showAsAction="never">
+        </item>
+
+        <item android:id="@+id/btnViewAll"
+            android:title="View All"
+            android:icon="@drawable/ic_view_all"
+            app:showAsAction="never" />
+
+        <item android:id="@+id/btnWaterRecommendations"
+            android:title="Water Recommendations"
+            android:icon="@drawable/ic_notifications"
+            app:showAsAction="never" />
+
+        <item android:id="@+id/btnLogOut"
+            android:title="Log Out"
+            android:icon="@drawable/ic_exit"
+            app:showAsAction="never" />
+    </menu>
+</item>
+</menu>

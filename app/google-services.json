@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "286275474401",
+    "firebase_url": "https://plantpedia-f0799.firebaseio.com",
+    "project_id": "plantpedia-f0799",
+    "storage_bucket": "plantpedia-f0799.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:286275474401:android:64ec20d5e3d0ea7fdc38a0",
+        "android_client_info": {
+          "package_name": "io.github.lhernandez1848.plantpedia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "286275474401-m5tiqmmr8vtjlqu0br0aq4i2n03op3v3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.github.lhernandez1848.plantpedia",
+            "certificate_hash": "240732abbf9a42304348e3055f9a6e4a79fba567"
+          }
+        },
+        {
+          "client_id": "286275474401-qaphcii0phijgsgq5c8lq5gsaqi2q871.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.github.lhernandez1848.plantpedia",
+            "certificate_hash": "123c6c7c17eff95678a7feaf4fb9bcce0277e9f0"
+          }
+        },
+        {
+          "client_id": "286275474401-bg1tjfqtl6htqic728fj5402nrplfhfv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBP5Ati3UxGxF5gsZM_0wDW8MkAlP0qZ4w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "286275474401-bg1tjfqtl6htqic728fj5402nrplfhfv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimaryLight">#dfeed4</color>
+    <color name="colorPrimary">#a1d97d</color>
+    <color name="colorYG3">#56c222</color>
+    <color name="colorYG4">#3b9b1b</color>
+    <color name="colorPrimaryDark">#257b18</color>
+    <color name="colorAccentLight">#e5cce6</color>
+    <color name="colorAccent">#c978b8</color>
+    <color name="colorAccentDarker">#b20093</color>
+    <color name="colorAccent2Darkest">#8d0073</color>
+    <color name="colorAccentDarkest">#750161</color>
+    <color name="darkGray">#585858</color>
+</resources>

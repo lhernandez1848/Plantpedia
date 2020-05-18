@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.github.lhernandez1848.plantpedia">
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera"></uses-feature>
+
+    <application
+        android:name=".Plantpedia"
+        android:allowBackup="true"
+        android:icon="@drawable/plant"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/plant"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".StartActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".SearchActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+
+                android:value="io.github.lhernandez1848.plantpedia.MainActivity">
+            </meta-data>
+        </activity>
+        <activity android:name=".RecommendationsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+
+                android:value="io.github.lhernandez1848.plantpedia.MainActivity">
+            </meta-data>
+        </activity>
+        <activity android:name=".AddPlantActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+
+                android:value="io.github.lhernandez1848.plantpedia.MainActivity">
+            </meta-data>
+        </activity>
+        <activity android:name=".ViewAllActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+
+                android:value="io.github.lhernandez1848.plantpedia.MainActivity">
+            </meta-data>
+        </activity>
+        <activity android:name=".SelectedPlantActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+
+                android:value="io.github.lhernandez1848.plantpedia.MainActivity">
+            </meta-data>
+        </activity>
+        <activity android:name=".EditPlantActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+
+                android:value="io.github.lhernandez1848.plantpedia.MainActivity">
+            </meta-data>
+        </activity>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+        <receiver
+            android:name=".NotificationReceiver"
+            android:enabled="true" />
+    </application>
+
+</manifest>

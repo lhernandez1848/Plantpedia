@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Plantpedia</string>
+    <string name="plant_name">Name</string>
+    <string name="plant_type">Type</string>
+    <string name="last_watered">Last Watered</string>
+    <string name="plant_sun">Sun</string>
+    <string name="water_req">Water</string>
+    <string name="str_water_freq">Water Frequency (days)</string>
+    <string name="str_temperature">Temperature</string>
+    <string name="str_day_temp">Day (\u2103)</string>
+    <string name="str_night_temp">Night (\u2103)</string>
+    <string name="str_humidity">Humidity Range</string>
+    <string name="str_humidity_start">Start ( % )</string>
+    <string name="str_humidity_end">End ( % )</string>
+    <string name="comments">Comments</string>
+    <string name="imageDescription">Image for plant</string>
+    <string name="str_add_plant">Add Plant</string>
+    <string name="str_edit_plant">Edit Plant</string>
+    <string name="logo_image">Logo Image</string>
+    <string name="str_email">Email</string>
+    <string name="str_password">Password</string>
+    <string name="str_select_date">Click to Select a Date</string>
+    <string name="str_required">* Required</string>
+
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <string name="facebook_application_id" translatable="false">plantpedia-f0799</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fbplantpedia-f0799</string>
+</resources>
