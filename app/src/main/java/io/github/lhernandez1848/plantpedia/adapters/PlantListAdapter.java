@@ -53,7 +53,7 @@ public class PlantListAdapter extends RecyclerView.Adapter<PlantListAdapter.Plan
                     intent.putExtra("plantName", tvPlantName.getText().toString());
                     intent.putExtra("activity", context.getClass().getSimpleName());
 
-                    // call order details activity
+                    // call activity
                     context.startActivity(intent);
                 }
             });

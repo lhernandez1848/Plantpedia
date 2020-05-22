@@ -30,8 +30,9 @@ public class Plantpedia extends Application {
         calendar.set(Calendar.HOUR_OF_DAY, 9);
         calendar.set(Calendar.MINUTE, 30);
 
-        if (calendar.getTime().compareTo(new Date()) < 0)
+        if (calendar.getTime().compareTo(new Date()) < 0){
             calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
 
         Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),

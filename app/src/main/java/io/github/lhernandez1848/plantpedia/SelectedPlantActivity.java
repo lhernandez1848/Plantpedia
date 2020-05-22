@@ -48,7 +48,7 @@ public class SelectedPlantActivity extends AppCompatActivity implements View.OnC
     Toolbar toolbar;
 
     // declaration of variables
-    String plantName, userId, typeName, sunlight, activityFrom;
+    String plantName, userId, typeName, sunlight;
 
     // declare classes
     private DatabaseReference databaseReference;
@@ -61,7 +61,6 @@ public class SelectedPlantActivity extends AppCompatActivity implements View.OnC
 
         Intent intent = getIntent();
         plantName = intent.getStringExtra("plantName");
-        activityFrom = intent.getStringExtra("activity");
         setTitle(plantName);
 
         // initialize and display toolbar
@@ -97,28 +96,26 @@ public class SelectedPlantActivity extends AppCompatActivity implements View.OnC
 
         userId = FirebaseAuth.getInstance().getUid();
 
-        if (activityFrom.equals("RecommendationsActivity")){
-            notificationAlert.setVisibility(View.VISIBLE);
-        }
-
         loadPlantData();
     }
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.btnEditPlantInfo){
-            // save order details to intent
-            Intent intent = new Intent(getApplicationContext(), EditPlantActivity.class);
-            intent.putExtra("plantName", plantName);
+        switch (view.getId()){
+            case R.id.btnEditPlantInfo:
+                // save order details to intent
+                Intent intent = new Intent(getApplicationContext(), EditPlantActivity.class);
+                intent.putExtra("plantName", plantName);
 
-            // call order details activity
-            startActivity(intent);
-        }
-        if(view.getId() == R.id.btnDeletePlant) {
-            deletePlantPopup();
-        }
-        if (view.getId() == R.id.btnNotificationAlert){
-            changeWaterDateDialog();
+                // call order details activity
+                startActivity(intent);
+                break;
+            case R.id.btnDeletePlant:
+                deletePlantPopup();
+                break;
+            case R.id.btnNotificationAlert:
+                changeWaterDateDialog();
+                break;
         }
     }
 
@@ -254,7 +251,14 @@ public class SelectedPlantActivity extends AppCompatActivity implements View.OnC
                             e.printStackTrace();
                         }
 
+                        String[] sDate = lastWateredDB.split("/");
+                        int lwDayDB = Integer.parseInt(sDate[0]);
+                        int lwMonthDB = Integer.parseInt(sDate[1]);
+                        int lwYearDB = Integer.parseInt(sDate[2]);
 
+                        if(globalMethods.isWateringDay(lwDayDB, lwMonthDB, lwYearDB, Integer.parseInt(waterFreqDB))){
+                            notificationAlert.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
             }

@@ -20,12 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import org.joda.time.DateTimeComparator;
-
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import io.github.lhernandez1848.plantpedia.adapters.PlantListAdapter;
 import io.github.lhernandez1848.plantpedia.models.Plant;
@@ -91,7 +86,7 @@ public class RecommendationsActivity extends AppCompatActivity {
                     lwMonthDB = Integer.parseInt(sDate[1]);
                     lwYearDB = Integer.parseInt(sDate[2]);
 
-                    if (isWateringDay(lwDayDB, lwMonthDB, lwYearDB, Integer.parseInt(waterFreqDB))){
+                    if (globalMethods.isWateringDay(lwDayDB, lwMonthDB, lwYearDB, Integer.parseInt(waterFreqDB))){
                         String dayTempDB = data.child("dayTemp").getValue().toString();
                         String nightTempDB = data.child("nightTemp").getValue().toString();
                         String humStartDB = data.child("startHumidity").getValue().toString();
@@ -116,19 +111,6 @@ public class RecommendationsActivity extends AppCompatActivity {
 
             }});
 
-    }
-
-    public Boolean isWateringDay(int day, int month, int year, int waterFreq){
-        Date cDate = new Date();
-        Date lwDate = new GregorianCalendar(year, month - 1, day).getTime();
-
-        Calendar waterCalendar = Calendar.getInstance();
-        waterCalendar.setTime(lwDate);
-        waterCalendar.add(Calendar.DAY_OF_MONTH, waterFreq);
-
-        Date rDate = waterCalendar.getTime();
-
-        return DateTimeComparator.getDateOnlyInstance().compare(cDate, rDate) == 0;
     }
 
     @Override
