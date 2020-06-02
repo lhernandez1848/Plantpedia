@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,23 +23,25 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import io.github.lhernandez1848.plantpedia.adapters.PlantListAdapter;
+import io.github.lhernandez1848.plantpedia.adapters.RecommendationsAdapter;
 import io.github.lhernandez1848.plantpedia.models.Plant;
 
-public class RecommendationsActivity extends AppCompatActivity {
+public class RecommendationsActivity extends AppCompatActivity implements WaterDateDialog.WaterDateDialogListener {
 
     // declare classes, adapters, models
     private DatabaseReference databaseReference;
-    private PlantListAdapter plantListAdapter;
+    private RecommendationsAdapter recListAdapter;
     private GlobalMethods globalMethods;
 
     // declare variables
     ArrayList<Plant> plantList;
-    int currentDay, currentMonth, currentYear, lwDayDB, lwMonthDB, lwYearDB;
+    int lwDayDB, lwMonthDB, lwYearDB;
+    String plantName, userId, resultCount;
 
     // declare widgets
     Toolbar toolbar;
     private RecyclerView recyclerView;
+    private TextView recommendationResult;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,16 +52,20 @@ public class RecommendationsActivity extends AppCompatActivity {
         // Firebase database reference
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
+        userId = FirebaseAuth.getInstance().getUid();
+
+        resultCount = "No plants need water today";
+
         // initialize widgets
         toolbar = (Toolbar) findViewById(R.id.recommendationToolbar);
         recyclerView = (RecyclerView) findViewById(R.id.recommendRecyclerView);
+        recommendationResult = (TextView) findViewById(R.id.recommendationResult);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         plantList = new ArrayList<>();
-        plantListAdapter = new PlantListAdapter(this, plantList);
+        recListAdapter = new RecommendationsAdapter(this, plantList);
 
         setSupportActionBar(toolbar);
-        recyclerView.setAdapter(plantListAdapter);
 
         // initialize and display home icon
         ActionBar actionBar = getSupportActionBar();
@@ -69,12 +76,16 @@ public class RecommendationsActivity extends AppCompatActivity {
         loadRecommendations();
     }
 
+    // get data from database and load corresponding fields
     private void loadRecommendations() {
+        recyclerView.setAdapter(recListAdapter);
+
         Query query = databaseReference.child("plant").child(FirebaseAuth.getInstance().getUid());
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                // loop through result list
                 for(DataSnapshot data : dataSnapshot.getChildren()){
                     String nameDB = data.child("name").getValue().toString();
                     String lastWateredDB = data.child("dateWatered").getValue().toString();
@@ -86,6 +97,7 @@ public class RecommendationsActivity extends AppCompatActivity {
                     lwMonthDB = Integer.parseInt(sDate[1]);
                     lwYearDB = Integer.parseInt(sDate[2]);
 
+                    // check if watering day conditions are met
                     if (globalMethods.isWateringDay(lwDayDB, lwMonthDB, lwYearDB, Integer.parseInt(waterFreqDB))){
                         String dayTempDB = data.child("dayTemp").getValue().toString();
                         String nightTempDB = data.child("nightTemp").getValue().toString();
@@ -100,9 +112,20 @@ public class RecommendationsActivity extends AppCompatActivity {
 
                         plantList.add(plant);
 
-                        plantListAdapter.notifyDataSetChanged();
+                        recListAdapter.notifyDataSetChanged();
+
+                        recListAdapter.SetOnRecAdapterListener((view, name) -> {
+                            plantName = name;
+
+                            globalMethods.changeWaterDateDialog(getSupportFragmentManager());
+                        });
+
+                        if (recListAdapter.getItemCount() > 0) {
+                            resultCount = recListAdapter.getItemCount() + " plant(s) to water";
+                        }
                     }
 
+                    recommendationResult.setText(resultCount);
                 }
             }
 
@@ -147,4 +170,16 @@ public class RecommendationsActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+    @Override
+    public void applyWaterDate() {
+        globalMethods.updateDatabase(databaseReference, plantName, userId);
+
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
+    }
+
 }

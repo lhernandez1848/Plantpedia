@@ -64,9 +64,6 @@
                 android:value="io.github.lhernandez1848.plantpedia.MainActivity">
             </meta-data>
         </activity>
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
         <receiver
             android:name=".NotificationReceiver"
             android:enabled="true" />

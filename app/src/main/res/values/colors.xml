@@ -11,4 +11,5 @@
     <color name="colorAccent2Darkest">#8d0073</color>
     <color name="colorAccentDarkest">#750161</color>
     <color name="darkGray">#585858</color>
+    <color name="lineGray">#f0f2f0</color>
 </resources>

@@ -19,7 +19,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -186,9 +185,6 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.editImageView){
-            dispatchTakePictureIntent();
-        }
         if (view.getId() == R.id.btnEditPlantToDB){
             editPlant();
         }
@@ -207,16 +203,13 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
         currentMonth = calendar.get(Calendar.MONTH);
         currentYear = calendar.get(Calendar.YEAR);
 
-        dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                selectedDay = day;
-                selectedMonth = month + 1;
-                selectedYear = year;
-                lastWateredDateSet = selectedDay + "/" + selectedMonth + "/" + selectedYear;
+        dateSetListener = (datePicker, year, month, day) -> {
+            selectedDay = day;
+            selectedMonth = month + 1;
+            selectedYear = year;
+            lastWateredDateSet = selectedDay + "/" + selectedMonth + "/" + selectedYear;
 
-                lastWatered.setText(lastWateredDateSet);
-            }
+            lastWatered.setText(lastWateredDateSet);
         };
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,

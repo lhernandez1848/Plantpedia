@@ -5,6 +5,7 @@
     <string name="last_watered">Last Watered</string>
     <string name="plant_sun">Sun</string>
     <string name="water_req">Water</string>
+    <string name="str_water_update">Update Water Date</string>
     <string name="str_water_freq">Water Frequency (days)</string>
     <string name="str_temperature">Temperature</string>
     <string name="str_day_temp">Day (\u2103)</string>
