@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainLayout"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <include
+        android:id="@+id/homeToolbar"
+        layout="@layout/custom_toolbar"/>
+
+    <ImageView
+        android:id="@+id/plant_pot"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/pot_cut"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_above="@+id/plant_pot"
+        android:layout_below="@+id/homeToolbar"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btnAddPlantsFromHome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:layout_weight="5"
+            android:scaleType="fitXY"
+            android:src="@drawable/leaf_add" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"/>
+
+        <ImageButton
+            android:id="@+id/btnSearchPlantsList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:src="@drawable/leaf_search" />
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btnAllPlantsList"
+        android:layout_width="270dp"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/plant_pot"
+        android:layout_below="@+id/homeToolbar"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="20dp"
+        android:scaleType="fitXY"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/leaf_all" />
+
+</RelativeLayout>

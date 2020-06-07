@@ -1,92 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mainLayout"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    tools:context="io.github.lhernandez1848.plantpedia.MainActivity">
 
-    <include
-        android:id="@+id/homeToolbar"
-        layout="@layout/custom_toolbar"/>
-
-    <ImageView
-        android:id="@+id/plant_pot"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/pot_cut"/>
-
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_above="@+id/plant_pot"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:id="@+id/frameLayout"></FrameLayout>
 
-        <ImageButton
-            android:id="@+id/btnAddPlantsFromHome"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:layout_weight="4"
-            android:scaleType="fitXY"
-            android:src="@drawable/leaf_add" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="5"/>
-
-        <ImageButton
-            android:id="@+id/btnSearchPlantsList"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:background="@android:color/transparent"
-            android:scaleType="fitXY"
-            android:src="@drawable/leaf_search" />
-
-    </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/btnAllPlantsList"
-        android:layout_width="220dp"
-        android:layout_height="360dp"
-        android:layout_above="@+id/plant_pot"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/leaf_all" />
-
-    <!--<ImageButton
-        android:id="@+id/btnAddPlantsFromHome"
-        android:layout_above="@+id/plant_pot"
-        android:layout_alignParentStart="true"
-        android:layout_width="125dp"
-        android:layout_height="200dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        android:src="@drawable/leaf_add" />
-
-    <ImageButton
-        android:id="@+id/btnSearchPlantsList"
-        android:layout_above="@+id/plant_pot"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/btnAddPlantsFromHome"
-        android:layout_marginStart="140dp"
-        android:layout_width="wrap_content"
-        android:layout_height="170dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        android:src="@drawable/leaf_search" />
-
-    <ImageButton
-        android:id="@+id/btnAllPlantsList"
-        android:layout_above="@+id/plant_pot"
-        android:layout_centerHorizontal="true"
-        android:layout_width="200dp"
-        android:layout_height="350dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        android:src="@drawable/leaf_all" />-->
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

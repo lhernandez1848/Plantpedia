@@ -1,24 +1,15 @@
 package io.github.lhernandez1848.plantpedia;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 
-public class MainActivity extends AppCompatActivity implements
-        View.OnClickListener{
+public class MainActivity extends AppCompatActivity {
 
-    private ImageButton addPlant, viewAllPlants, searchPlants;
-    Toolbar toolbar;
-
-    private GlobalMethods globalMethods;
+    private Plantpedia app;
+    RelativeLayout relLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,74 +17,38 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         setTitle("Home");
 
-        // initialize and display toolbar
-        toolbar = findViewById(R.id.homeToolbar);
-        setSupportActionBar(toolbar);
+        relLayout = (RelativeLayout) findViewById(R.id.mainLayout);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        // initialize app to start notification service
+        app = (Plantpedia) getApplication();
 
-        addPlant = (ImageButton) findViewById(R.id.btnAddPlantsFromHome);
-        viewAllPlants = (ImageButton) findViewById(R.id.btnAllPlantsList);
-        searchPlants = (ImageButton) findViewById(R.id.btnSearchPlantsList);
-
-        globalMethods = new GlobalMethods(this);
-
-        addPlant.setOnClickListener(this);
-        viewAllPlants.setOnClickListener(this);
-        searchPlants.setOnClickListener(this);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frameLayout, new MainActivityFragment())
+                .commit();
 
     }
 
     @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.btnAddPlantsFromHome) {
-            startActivity(new Intent(
-                    getApplicationContext(), AddPlantActivity.class));
+    public void onBackPressed() {
+        // Clear any existing layouts before popping the stack.
+        if (relLayout != null) {
+            relLayout.removeAllViews();
         }
-        if (v.getId() == R.id.btnAllPlantsList) {
-            startActivity(new Intent(
-                    getApplicationContext(), ViewAllActivity.class));
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        if (fragmentManager.getBackStackEntryCount() > 1 ) {
+            fragmentManager.popBackStack();
+            return;
         }
-        if (v.getId() == R.id.btnSearchPlantsList) {
-            startActivity(new Intent(
-                    getApplicationContext(), SearchActivity.class));
-        }
+
+        // Exit the app if there are no more fragments.
+        super.onBackPressed();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu, menu);
-
-        return true;
-    }
-
-    @Override
-    public  boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.btnSearch:
-                startActivity(new Intent(
-                        getApplicationContext(), SearchActivity.class));
-                return true;
-            case R.id.btnAddPlant:
-                startActivity(new Intent(
-                        getApplicationContext(), AddPlantActivity.class));
-                return true;
-            case R.id.btnViewAll:
-                startActivity(new Intent(
-                        getApplicationContext(), ViewAllActivity.class));
-                return true;
-            case R.id.btnWaterRecommendations:
-                startActivity(new Intent(
-                        getApplicationContext(), RecommendationsActivity.class));
-                return true;
-            case R.id.btnLogOut:
-                globalMethods.signOut();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+    protected void onPause() {
+        super.onPause();
     }
 
 }
