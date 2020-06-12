@@ -29,11 +29,11 @@
                     android:id="@+id/addImageView"
                     android:layout_width="200dp"
                     android:layout_height="200dp"
-                    android:layout_marginTop="20dp"
                     android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
                     android:background="@drawable/solid_border_white"
-                    android:scaleType="centerCrop"
-                    android:contentDescription="@string/imageDescription" />
+                    android:contentDescription="@string/imageDescription"
+                    android:scaleType="centerCrop" />
 
             </LinearLayout>
 

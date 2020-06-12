@@ -2,6 +2,7 @@ package io.github.lhernandez1848.plantpedia;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,7 +17,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -69,6 +69,8 @@ public class AddPlantActivity extends AppCompatActivity
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_LOAD_IMAGE = 2;
+    private static final int PERMISSION_REQUEST_CODE = 200;
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 201;
 
     String userId;
 
@@ -172,9 +174,8 @@ public class AddPlantActivity extends AppCompatActivity
 
     @Override
     public void onClick(View view) {
-
         if (view.getId() == R.id.addImageView){
-            showImageMethodDialog();
+            globalMethods.showImageMethodDialog(getSupportFragmentManager());
         } else if (view.getId() == R.id.btnAddPlantToDB){
             getPlantInfoToAdd();
         } else if(view.getId() == R.id.txtLastWateredDatePicker){
@@ -189,16 +190,13 @@ public class AddPlantActivity extends AppCompatActivity
         currentMonth = calendar.get(Calendar.MONTH);
         currentYear = calendar.get(Calendar.YEAR);
 
-        dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                selectedDay = day;
-                selectedMonth = month + 1;
-                selectedYear = year;
-                lastWateredDateSet = selectedDay + "/" + selectedMonth + "/" + selectedYear;
+        dateSetListener = (datePicker, year, month, day) -> {
+            selectedDay = day;
+            selectedMonth = month + 1;
+            selectedYear = year;
+            lastWateredDateSet = selectedDay + "/" + selectedMonth + "/" + selectedYear;
 
-                lastWatered.setText(lastWateredDateSet);
-            }
+            lastWatered.setText(lastWateredDateSet);
         };
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
@@ -350,21 +348,42 @@ public class AddPlantActivity extends AppCompatActivity
         return Uri.parse(savedImage);
     }
 
-    // show dialog for choosing image method
-    private void showImageMethodDialog() {
-        ChooseImageMethodDialog chooseImageMethodDialog = new ChooseImageMethodDialog();
-
-        chooseImageMethodDialog.show(getSupportFragmentManager(), "Choose Image Method");
-    }
 
     // apply image method choice
     @Override
     public void applyImageMethodChoice(String imageMethodChoice) {
-        if (imageMethodChoice.equals("gallery")){
-            chooseImageIntent();
-        } else if (imageMethodChoice.equals("camera")){
-            dispatchTakePictureIntent();
+        if (!globalMethods.checkStoragePermission()) {
+            globalMethods.requestStoragePermission();
+        } else {
+            if (imageMethodChoice.equals("gallery")){
+                chooseImageIntent();
+            } else if (imageMethodChoice.equals("camera")){
+                if(!globalMethods.checkCameraPermission()){
+                    globalMethods.requestCameraPermission();
+                } else {
+                    dispatchTakePictureIntent();
+                }
+            }
         }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                chooseImageIntent();
+            }
+        } else if (requestCode == CAMERA_PERMISSION_REQUEST_CODE){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if(!globalMethods.checkStoragePermission()){
+                    globalMethods.requestStoragePermission();
+                } else {
+                    dispatchTakePictureIntent();
+                }
+            }
+        }
+
     }
 
     // load the spinners

@@ -3,6 +3,7 @@ package io.github.lhernandez1848.plantpedia;
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ImageDecoder;
@@ -25,13 +26,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -75,6 +73,8 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_LOAD_IMAGE = 2;
+    private static final int PERMISSION_REQUEST_CODE = 200;
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 201;
 
     String userId;
 
@@ -189,7 +189,7 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
             editPlant();
         }
         if (view.getId() == R.id.editImageView){
-            showImageMethodDialog();
+            globalMethods.showImageMethodDialog(getSupportFragmentManager());
         }
         if (view.getId() == R.id.txtEditLastWateredDatePicker){
             launchDatePicker();
@@ -263,21 +263,40 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
         return Uri.parse(savedImage);
     }
 
-    // show dialog for choosing image method
-    private void showImageMethodDialog() {
-        ChooseImageMethodDialog chooseImageMethodDialog = new ChooseImageMethodDialog();
-
-        chooseImageMethodDialog.show(getSupportFragmentManager(), "Choose Image Method");
-    }
-
     // apply image method choice
     @Override
     public void applyImageMethodChoice(String imageMethodChoice) {
-        if (imageMethodChoice.equals("gallery")){
-            chooseImageIntent();
-        } else if (imageMethodChoice.equals("camera")){
-            dispatchTakePictureIntent();
+        if (!globalMethods.checkStoragePermission()) {
+            globalMethods.requestStoragePermission();
+        } else {
+            if (imageMethodChoice.equals("gallery")){
+                chooseImageIntent();
+            } else if (imageMethodChoice.equals("camera")){
+                if(!globalMethods.checkCameraPermission()){
+                    globalMethods.requestCameraPermission();
+                } else {
+                    dispatchTakePictureIntent();
+                }
+            }
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                chooseImageIntent();
+            }
+        } else if (requestCode == CAMERA_PERMISSION_REQUEST_CODE){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if(!globalMethods.checkStoragePermission()){
+                    globalMethods.requestStoragePermission();
+                } else {
+                    dispatchTakePictureIntent();
+                }
+            }
+        }
+
     }
 
     // load the spinners
@@ -291,6 +310,7 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
         sunAdd.setAdapter(sunlightArrayAdapter);
     }
 
+    // load all fields with corresponding data
     public void loadEditText(){
         Query lastQuery = databaseReference.child("plant").child(userId).orderByKey();
         lastQuery.addValueEventListener(new ValueEventListener() {
@@ -329,14 +349,15 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
                         typeAdd.setSelection(type_id);
                         sunAdd.setSelection(sunlight_id);
 
-
-                        try {
-                            ContentResolver contentResolver = getContentResolver();
-                            ImageDecoder.Source imageSrc = ImageDecoder.createSource(contentResolver, imageUri);
-                            Drawable drawable = ImageDecoder.decodeDrawable(imageSrc);
-                            imageView.setImageDrawable(drawable);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if (globalMethods.checkStoragePermission()){
+                            try {
+                                ContentResolver contentResolver = getContentResolver();
+                                ImageDecoder.Source imageSrc = ImageDecoder.createSource(contentResolver, imageUri);
+                                Drawable drawable = ImageDecoder.decodeDrawable(imageSrc);
+                                imageView.setImageDrawable(drawable);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
@@ -395,20 +416,14 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
                         // childUpdates.put(key, detailValues);
 
                         databaseReference.child("plant").child(userId).child(key).setValue(detailValues)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        // Write was successful!
-                                        Toast.makeText(getApplicationContext(), name + " updated", Toast.LENGTH_SHORT).show();
-                                        finish();
-                                    }
+                                .addOnSuccessListener(aVoid -> {
+                                    // Write was successful!
+                                    Toast.makeText(getApplicationContext(), name + " updated", Toast.LENGTH_SHORT).show();
+                                    finish();
                                 })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        // Write failed
-                                        Snackbar.make(findViewById(R.id.addPlantLayout), "ERROR: Plant not added", Snackbar.LENGTH_SHORT).show();
-                                    }
+                                .addOnFailureListener(e -> {
+                                    // Write failed
+                                    Snackbar.make(findViewById(R.id.addPlantLayout), "ERROR: Plant not added", Snackbar.LENGTH_SHORT).show();
                                 });
                     }
 

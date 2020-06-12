@@ -61,7 +61,7 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        btnAllPlantsList.setOnClickListener(this);
+        btnAddPlantsFromHome.setOnClickListener(this);
         btnSearchPlantsList.setOnClickListener(this);
         btnAllPlantsList.setOnClickListener(this);
 

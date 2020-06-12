@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import io.github.lhernandez1848.plantpedia.GlobalMethods;
 import io.github.lhernandez1848.plantpedia.R;
 import io.github.lhernandez1848.plantpedia.SelectedPlantActivity;
 import io.github.lhernandez1848.plantpedia.models.Plant;
@@ -36,6 +37,7 @@ public class PlantListAdapter extends RecyclerView.Adapter<PlantListAdapter.Plan
 
         private TextView tvPlantName, tvComment;
         private ImageView allImageView;
+        private GlobalMethods globalMethods;
 
         public PlantHolder(View itemView) {
             super(itemView);
@@ -44,18 +46,17 @@ public class PlantListAdapter extends RecyclerView.Adapter<PlantListAdapter.Plan
             tvComment = (TextView) itemView.findViewById(R.id.commentsTextView);
             allImageView = (ImageView) itemView.findViewById(R.id.allImageView);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            globalMethods = new GlobalMethods(context);
 
-                    // save plant details to intent
-                    Intent intent = new Intent(context, SelectedPlantActivity.class);
-                    intent.putExtra("plantName", tvPlantName.getText().toString());
-                    intent.putExtra("activity", context.getClass().getSimpleName());
+            itemView.setOnClickListener(v -> {
 
-                    // call activity
-                    context.startActivity(intent);
-                }
+                // save plant details to intent
+                Intent intent = new Intent(context, SelectedPlantActivity.class);
+                intent.putExtra("plantName", tvPlantName.getText().toString());
+                intent.putExtra("activity", context.getClass().getSimpleName());
+
+                // call activity
+                context.startActivity(intent);
             });
         }
 
@@ -69,13 +70,15 @@ public class PlantListAdapter extends RecyclerView.Adapter<PlantListAdapter.Plan
             tvPlantName.setText(name);
             tvComment.setText(comment);
 
-            try {
-                ContentResolver contentResolver = context.getContentResolver();
-                ImageDecoder.Source imageSrc = ImageDecoder.createSource(contentResolver, imageUri);
-                Drawable drawable = ImageDecoder.decodeDrawable(imageSrc);
-                allImageView.setImageDrawable(drawable);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (globalMethods.checkStoragePermission()) {
+                try {
+                    ContentResolver contentResolver = context.getContentResolver();
+                    ImageDecoder.Source imageSrc = ImageDecoder.createSource(contentResolver, imageUri);
+                    Drawable drawable = ImageDecoder.decodeDrawable(imageSrc);
+                    allImageView.setImageDrawable(drawable);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

@@ -9,6 +9,7 @@
         layout="@layout/custom_toolbar"/>
 
     <LinearLayout
+        android:id="@+id/viewAllResultLayout"
         android:layout_below="@+id/viewAllToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,5 +24,16 @@
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/viewAllResultCount"
+        android:layout_below="@+id/viewAllResultLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        android:textColor="@android:color/holo_red_dark"
+        android:textStyle="italic"
+        android:textSize="17sp"/>
 
 </RelativeLayout>

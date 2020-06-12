@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +29,7 @@ import io.github.lhernandez1848.plantpedia.models.Plant;
 public class ViewAllActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
+    private TextView viewAllResultCount;
     Toolbar toolbar;
 
     // declare classes, adapters, models
@@ -53,7 +55,9 @@ public class ViewAllActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        // initialize widgets
         recyclerView = (RecyclerView) findViewById(R.id.allRecyclerView);
+        viewAllResultCount = (TextView) findViewById(R.id.viewAllResultCount);
 
         // Firebase database reference
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -110,6 +114,8 @@ public class ViewAllActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                String resultMessage = "You haven't added any plants yet. Try adding some now!";
+
                 for(DataSnapshot data : dataSnapshot.getChildren()){
                     String nameDB = data.child("name").getValue().toString();
                     String lastWateredDB = data.child("dateWatered").getValue().toString();
@@ -130,6 +136,11 @@ public class ViewAllActivity extends AppCompatActivity {
 
                     plantListAdapter.notifyDataSetChanged();
                 }
+
+                if (plantListAdapter.getItemCount() > 0) {
+                    resultMessage = plantListAdapter.getItemCount() + " plant(s) in database";
+                }
+                viewAllResultCount.setText(resultMessage);
             }
 
             @Override

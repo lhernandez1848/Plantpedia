@@ -190,22 +190,26 @@ public class SelectedPlantActivity extends AppCompatActivity implements View.OnC
 
                         Uri imageUri = Uri.parse(imageDB);
 
-                        try {
-                            ContentResolver contentResolver = getContentResolver();
-                            ImageDecoder.Source imageSrc = ImageDecoder.createSource(contentResolver, imageUri);
-                            Drawable drawable = ImageDecoder.decodeDrawable(imageSrc);
-                            imageView.setImageDrawable(drawable);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if (globalMethods.checkStoragePermission()){
+                            try {
+                                ContentResolver contentResolver = getContentResolver();
+                                ImageDecoder.Source imageSrc = ImageDecoder.createSource(contentResolver, imageUri);
+                                Drawable drawable = ImageDecoder.decodeDrawable(imageSrc);
+                                imageView.setImageDrawable(drawable);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
 
-                        String[] sDate = lastWateredDB.split("/");
-                        int lwDayDB = Integer.parseInt(sDate[0]);
-                        int lwMonthDB = Integer.parseInt(sDate[1]);
-                        int lwYearDB = Integer.parseInt(sDate[2]);
+                        if (!lastWateredDB.equals("")){
+                            String[] sDate = lastWateredDB.split("/");
+                            int lwDayDB = Integer.parseInt(sDate[0]);
+                            int lwMonthDB = Integer.parseInt(sDate[1]);
+                            int lwYearDB = Integer.parseInt(sDate[2]);
 
-                        if(globalMethods.isWateringDay(lwDayDB, lwMonthDB, lwYearDB, Integer.parseInt(waterFreqDB))){
-                            notificationAlert.setVisibility(View.VISIBLE);
+                            if(globalMethods.isWateringDay(lwDayDB, lwMonthDB, lwYearDB, Integer.parseInt(waterFreqDB))){
+                                notificationAlert.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 }

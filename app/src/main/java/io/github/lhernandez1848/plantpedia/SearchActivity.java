@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
@@ -36,6 +37,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private EditText plantNameSearch;
     private Button btnSearch;
     private RecyclerView recyclerView;
+    private TextView resultCount;
     Toolbar toolbar;
 
     private DatabaseReference databaseReference;
@@ -61,6 +63,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         // initialize widgets
         recyclerView = (RecyclerView) findViewById(R.id.searchRecyclerView);
         plantNameSearch = (EditText) findViewById(R.id.plantSearchInput);
+        resultCount = (TextView) findViewById(R.id.searchResultCount);
         btnSearch = (Button) findViewById(R.id.btnSearchPlant);
 
         // set listeners
@@ -133,11 +136,12 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void loadReasults(final String sPlantName){
-        // create a List of Map<String, ?> objects
         Query query = databaseReference.child("plant").child(FirebaseAuth.getInstance().getUid()).orderByChild("name");
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                String resultMessage = "No plants found";
 
                 for(DataSnapshot data : dataSnapshot.getChildren()){
                     String nameDB = data.child("name").getValue().toString();
@@ -163,6 +167,13 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                         plantListAdapter.notifyDataSetChanged();
                     }
                 }
+
+                if (plantListAdapter.getItemCount() > 0 ) {
+                    resultMessage = plantListAdapter.getItemCount() + " plant(s) found";
+                }
+
+                resultCount.setText(resultMessage);
+                resultCount.setVisibility(View.VISIBLE);
             }
 
             @Override

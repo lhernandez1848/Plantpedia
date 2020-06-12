@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import io.github.lhernandez1848.plantpedia.GlobalMethods;
 import io.github.lhernandez1848.plantpedia.R;
 import io.github.lhernandez1848.plantpedia.SelectedPlantActivity;
 import io.github.lhernandez1848.plantpedia.models.Plant;
@@ -40,6 +41,7 @@ public class RecommendationsAdapter extends RecyclerView.Adapter<Recommendations
         private ImageView allImageView;
         private ImageButton btnRecWatered;
         private String plantName;
+        private GlobalMethods globalMethods;
 
         public RecommendationsHolder(final View itemView) {
             super(itemView);
@@ -47,6 +49,8 @@ public class RecommendationsAdapter extends RecyclerView.Adapter<Recommendations
             tvPlantName = (TextView) itemView.findViewById(R.id.nameRecTextView);
             allImageView = (ImageView) itemView.findViewById(R.id.allRecImageView);
             btnRecWatered = (ImageButton) itemView.findViewById(R.id.btnRecWatered);
+
+            globalMethods = new GlobalMethods(context);
 
             plantName = "";
 
@@ -77,13 +81,15 @@ public class RecommendationsAdapter extends RecyclerView.Adapter<Recommendations
             tvPlantName.setText(name);
             plantName = name;
 
-            try {
-                ContentResolver contentResolver = context.getContentResolver();
-                ImageDecoder.Source imageSrc = ImageDecoder.createSource(contentResolver, imageUri);
-                Drawable drawable = ImageDecoder.decodeDrawable(imageSrc);
-                allImageView.setImageDrawable(drawable);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (globalMethods.checkStoragePermission()){
+                try {
+                    ContentResolver contentResolver = context.getContentResolver();
+                    ImageDecoder.Source imageSrc = ImageDecoder.createSource(contentResolver, imageUri);
+                    Drawable drawable = ImageDecoder.decodeDrawable(imageSrc);
+                    allImageView.setImageDrawable(drawable);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
