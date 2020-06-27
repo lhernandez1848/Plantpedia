@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -23,23 +24,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
+import java.io.InputStream;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Map;
 
 import io.github.lhernandez1848.plantpedia.models.Plant;
@@ -214,8 +210,8 @@ public class AddPlantActivity extends AppCompatActivity
         getNumberInputs();
 
         if(sPlantName.equals("")){
-            Toast.makeText(this, "Plant name is required",
-                    Toast.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(R.id.addPlantLayout), "Plant name is required",
+                    Snackbar.LENGTH_SHORT).show();
             nameError.setVisibility(View.VISIBLE);
         }
         else {
@@ -261,46 +257,53 @@ public class AddPlantActivity extends AppCompatActivity
                                final int waterFrequency, final String comment,
                                final String imageURI) {
 
-        Query lastQuery = databaseReference.child("plant").child(userId).orderByKey().limitToLast(1);
+        String key = databaseReference.child("plant").push().getKey();
+
+        Plant plant = new Plant(name, typeId, sunlightId, dayTemp, nightTemp, startHumidity,
+                endHumidity, dateWatered, waterFrequency, comment, imageURI);
+        Map<String, Object> detailValues = plant.toPlantDetails();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/plant/" + userId + "/" + key, detailValues);
+        databaseReference.updateChildren(childUpdates)
+                .addOnSuccessListener(aVoid -> {
+                // Write was successful!
+                Toast.makeText(getApplicationContext(), "Plant added", Toast.LENGTH_SHORT).show();
+                finish();
+            })
+                .addOnFailureListener(e -> {
+                    // Write failed
+                    Snackbar.make(findViewById(R.id.addPlantLayout), "ERROR: Plant not added", Snackbar.LENGTH_SHORT).show();
+                });;
+
+        /*Query lastQuery = databaseReference.child("plant").child(userId);
         lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot data : dataSnapshot.getChildren())
-                {
-                    int keyInt = (Integer.parseInt(data.getKey())) + 1;
-                    String key = Integer.toString(keyInt);
+                int keyInt = (Integer.parseInt(dataSnapshot.getKey())) + 1;
+                String key = Integer.toString(keyInt);
 
-                    Plant plant = new Plant(name, typeId, sunlightId, dayTemp, nightTemp, startHumidity,
-                            endHumidity, dateWatered, waterFrequency, comment, imageURI);
+                Plant plant = new Plant(name, typeId, sunlightId, dayTemp, nightTemp, startHumidity,
+                        endHumidity, dateWatered, waterFrequency, comment, imageURI);
 
-                  //  Map<String, Object> childUpdates = new HashMap<>();
+                Map<String, Object> detailValues = plant.toPlantDetails();
 
-                    Map<String, Object> detailValues = plant.toPlantDetails();
-                   // childUpdates.put(key, detailValues);
-
-                    databaseReference.child("plant").child(userId).child(key).setValue(detailValues)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    // Write was successful!
-                                    Toast.makeText(getApplicationContext(), "Plant added", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    // Write failed
-                                    Snackbar.make(findViewById(R.id.addPlantLayout), "ERROR: Plant not added", Snackbar.LENGTH_SHORT).show();
-                                }
-                            });
-                }
+                databaseReference.child("plant").child(userId).child(key).setValue(detailValues)
+                        .addOnSuccessListener(aVoid -> {
+                            // Write was successful!
+                            Toast.makeText(getApplicationContext(), "Plant added", Toast.LENGTH_SHORT).show();
+                            finish();
+                        })
+                        .addOnFailureListener(e -> {
+                            // Write failed
+                            Snackbar.make(findViewById(R.id.addPlantLayout), "ERROR: Plant not added", Snackbar.LENGTH_SHORT).show();
+                        });
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
-            }});
+            }});*/
     }
 
 
@@ -327,13 +330,16 @@ public class AddPlantActivity extends AppCompatActivity
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap takeImageBitmap = (Bitmap) extras.get("data");
+
             imageView.setImageBitmap(takeImageBitmap);
         }
         // if photo comes from device gallery
         if (requestCode == REQUEST_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
             try {
-                Bitmap loadImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                InputStream imageStream = getContentResolver().openInputStream(selectedImage);
+                Bitmap loadImageBitmap = BitmapFactory.decodeStream(imageStream);
+
                 imageView.setImageBitmap(loadImageBitmap);
             } catch(Exception e){
                 e.printStackTrace();

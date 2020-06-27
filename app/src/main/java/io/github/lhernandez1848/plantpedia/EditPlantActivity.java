@@ -404,16 +404,12 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
                     String nameDB = Objects.requireNonNull(data.child("name").getValue()).toString();
 
                     if (nameDB.equals(plantName)) {
-                        int keyInt = Integer.parseInt(data.getKey());
-                        String key = Integer.toString(keyInt);
+                        String key = data.getKey();
 
                         Plant plant = new Plant(name, type_id, sunlight_id, dayTemp, nightTemp, humStart,
                                 humEnd, lastWateredDateSet, plantWater, comment, imageUri);
 
-                        //  Map<String, Object> childUpdates = new HashMap<>();
-
                         Map<String, Object> detailValues = plant.toPlantDetails();
-                        // childUpdates.put(key, detailValues);
 
                         databaseReference.child("plant").child(userId).child(key).setValue(detailValues)
                                 .addOnSuccessListener(aVoid -> {
